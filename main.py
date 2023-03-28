@@ -15,7 +15,7 @@ class PredictionOut(BaseModel):
 def home():
     return {model_version}
 
-@app.post("/predict", response_model=PredictionOut)
+@app.get("/predict", response_model=PredictionOut)
 def predict(payload: TextIn):
     feel = predict_pipeline(payload.text)
     return {"feel": feel}
