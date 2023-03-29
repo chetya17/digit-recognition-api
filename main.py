@@ -5,17 +5,18 @@ from model.model import __version__ as model_version
 
 app = FastAPI()
 
-class TextIn(BaseModel):
-    text: str
+# class TextIn(BaseModel):
+#     text: str
+
 
 class PredictionOut(BaseModel):
     feel: int
 
-@app.get("/")
-def home():
-    return {model_version}
+# @app.get("/")
+# def home():
+#     return {model_version}
 
-@app.get("/predict", response_model=PredictionOut)
-def predict(payload: TextIn):
-    feel = predict_pipeline(payload.text)
+@app.get("/predict/{text}", response_model=PredictionOut)
+def predict(text: str):
+    feel = predict_pipeline(text)
     return {"feel": feel}
