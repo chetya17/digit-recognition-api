@@ -1,18 +1,21 @@
 import pickle
-import re
 from pathlib import Path
+import cv2
+import numpy as np
 
-__version__ = "0.1.0"
 
-BASE_DIR = Path(__file__).resolve(strict=True).parent
 
-with open(f"{BASE_DIR}/trained_pipeline-{__version__}.pkl", "rb") as f:
+
+with open("/rfc.pkl", "rb") as f:
     model = pickle.load(f)
 
 
 def predict_pipeline(text):
-    text = re.sub(r'[!@#$(),\n"%^*?\:;~`0-9]'," ", text)
-    text = re.sub(r"[[]]", " ", text)
-    text = text.lower()
-    pred = model.predict([text])
+    test_image = cv2.imread(text, cv2.IMREAD_GRAYSCALE)
+    img_resized = cv2.resize(test_image, (28, 28), interpolation=cv2.INTER_LINEAR)
+    img_resized = cv2.bitwise_not(img_resized)
+    img_resized = np.array(img_resized)
+    img_resized = img_resized.reshape(1,784)
+    
+    pred = model.predict(img_resized)
     return pred

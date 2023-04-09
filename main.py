@@ -7,21 +7,21 @@ from types import SimpleNamespace
 
 app = FastAPI()
 
-class TextIn(BaseModel):
-    text: str
-    # x = json.loads(text, object_hook=lambda d: SimpleNamespace(**d))
-
+path = '1.png'
 
 class PredictionOut(BaseModel):
-    feel: int
+    text: list
+
 
 @app.get("/")
 def home():
     return {model_version}
 
-@app.post("/predict/{text}", response_model=PredictionOut)
-def predict(text: str):
-    feel = predict_pipeline(text)
-    return {"feel": feel}
+
+@app.post("/predict", response_model=PredictionOut)
+def predict(path: str):
+    text = predict_pipeline(path)
+    return {"text": text}
 
 # payload: TextIn
+# /{path}
